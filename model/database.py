@@ -26,7 +26,16 @@ class UsersDB:
                           id SERIAL PRIMARY KEY,                                     
                           username TEXT, password TEXT, 
                           telephone_number TEXT,
-                          ip_address TEXT)""")
+                          ip_address TEXT);
+                          CREATE TABLE IF NOT EXISTS user_chats(
+                          id SERIAL PRIMARY KEY,
+                          user_id_1 INTEGER,
+                          user_id_2 INTEGER);
+                          CREATE TABLE IF NOT EXISTS user_messages(
+                          id SERIAL PRIMARY KEY,
+                          user_chat_id INTEGER,
+                          text TEXT,
+                          sender INTEGER);""")
         self._conn.commit()
 
     def _execute_query(self, query, params=None):
