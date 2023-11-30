@@ -26,7 +26,8 @@ class UsersDB:
                           id SERIAL PRIMARY KEY,                                     
                           username TEXT, password TEXT, 
                           telephone_number TEXT,
-                          ip_address TEXT);
+                          remember_me BOOLEAN,
+                          uuid TEXT);
                           CREATE TABLE IF NOT EXISTS user_chats(
                           id SERIAL PRIMARY KEY,
                           user_id_1 INTEGER,
@@ -40,19 +41,20 @@ class UsersDB:
 
     def _execute_query(self, query, params=None):
         try:
-            if params:
-                self._cur.execute(query, params)
-            else:
-                self._cur.execute(query)
-
+            self._cur.execute(query, params)
             self._conn.commit()
             return self._cur
         except Exception as e:
             print(f"Ошибка при выполнении запроса: {e}")
 
-    def set_user(self, username: str, password: str, telephone_number: str, ip_address: str) -> None:
-        query = "INSERT INTO users (username, password, telephone_number, ip_address) VALUES (%s, %s, %s, %s)"
-        self._execute_query(query, (username, password, telephone_number, ip_address))
+    def set_user(self, username: str, password: str, telephone_number: str, remember_me: bool, uuid: str) -> None:
+        query = """INSERT INTO users (username, 
+                                      password, 
+                                      telephone_number, 
+                                      remember_me, 
+                                      uuid) 
+                                      VALUES (%s, %s, %s, %s, %s)"""
+        self._execute_query(query, (username, password, telephone_number, remember_me, uuid))
 
     def find_username(self, username: str) -> tuple:
         query = "SELECT username FROM users WHERE username = %s"
@@ -68,3 +70,12 @@ class UsersDB:
         query = "SELECT password FROM users WHERE username = %s"
         db_password = self._execute_query(query, (username,))
         return db_password.fetchone()
+
+    def get_remember_me(self, uuid: str) -> tuple:
+        query = "SELECT remember_me FROM users WHERE uuid = %s"
+        db_remember_me = self._execute_query(query, (uuid,))
+        return db_remember_me.fetchone()
+
+    def update_remember_me(self, remember_me: bool, uuid: str) -> None:
+        query = "UPDATE users SET remember_me = %s WHERE uuid = %s"
+        self._execute_query(query, (remember_me, uuid))

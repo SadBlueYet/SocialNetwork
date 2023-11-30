@@ -2,11 +2,14 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>864</width>
+    <width>885</width>
     <height>635</height>
    </rect>
   </property>
@@ -20,25 +23,161 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background: #323232;
-</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget#centralwidget { 
+ border-image:url(:/back/back.PNG) 0 0 0 0 stretch stretch; 
+}
+</string>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer_2">
+      <item row="0" column="1">
+       <spacer name="verticalSpacer_4">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Preferred</enum>
+         <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="1">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <property name="topMargin">
+         <number>70</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLineEdit" name="username_line">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>300</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">width: 300px;
+height:40px;
+flex-shrink: 0;
+border-radius: 20px;
+background: #222;
+color: #898888;
+</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="placeholderText">
+           <string>Имя Пользователя</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLineEdit" name="password_line">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">width: 300px;
+height:40px;
+flex-shrink: 0;
+border-radius: 20px;
+background: #222;
+color: #898888;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="placeholderText">
+           <string>Пароль</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLineEdit" name="telephone_number_line">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">width: 300px;
+height:40px;
+flex-shrink: 0;
+border-radius: 20px;
+background: #222;
+color: #898888;
+
+</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="placeholderText">
+           <string>Номер телефона</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="1">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>70</height>
          </size>
         </property>
        </spacer>
@@ -79,8 +218,6 @@
           <weight>50</weight>
           <italic>false</italic>
           <bold>false</bold>
-          <underline>false</underline>
-          <kerning>true</kerning>
          </font>
         </property>
         <property name="styleSheet">
@@ -89,8 +226,7 @@ font-size: 35px;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
-
-</string>
+background: none</string>
         </property>
         <property name="text">
          <string>Регистрация</string>
@@ -99,6 +235,22 @@ line-height: normal;
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
+      </item>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item row="2" column="1">
        <spacer name="verticalSpacer">
@@ -116,150 +268,17 @@ line-height: normal;
         </property>
        </spacer>
       </item>
-      <item row="3" column="1">
-       <layout class="QGridLayout" name="gridLayout_2">
+      <item row="5" column="1">
+       <layout class="QGridLayout" name="gridLayout_3">
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
-        <item row="0" column="0">
-         <widget class="QLineEdit" name="username_line">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>300</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">width: 300px;
-height:40px;
-flex-shrink: 0;
-border-radius: 20px;
-background: #222;
-color: #898888;
-</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="placeholderText">
-           <string>Имя Пользователя</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLineEdit" name="password_line">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">width: 300px;
-height:40px;
-flex-shrink: 0;
-border-radius: 20px;
-background: #222;
-color: #898888;</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="placeholderText">
-           <string>Пароль</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLineEdit" name="number_line">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">width: 300px;
-height:40px;
-flex-shrink: 0;
-border-radius: 20px;
-background: #222;
-color: #898888;
-
-</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="placeholderText">
-           <string>Номер телефона</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1">
-       <spacer name="verticalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+        <property name="topMargin">
+         <number>40</number>
         </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+        <property name="bottomMargin">
+         <number>0</number>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>10</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="7" column="1">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0" alignment="Qt::AlignLeft">
-         <widget class="QPushButton" name="accaunt_button">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-	border: none;
-	color: #898888;
-}
-QPushButton:hover{
-	border: none;
-	color: #4A4A4A;
-}</string>
-          </property>
-          <property name="text">
-           <string>Уже есть аккаунт</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QPushButton" name="registry_button">
           <property name="sizePolicy">
@@ -292,25 +311,55 @@ QPushButton:hover{
           </property>
          </widget>
         </item>
+        <item row="1" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>50</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="styleSheet">
+             <string notr="true">color: #898888;
+
+</string>
+            </property>
+            <property name="text">
+             <string>Запомнить меня</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="accaunt_button">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+	border: none;
+	color: #898888;
+	background: none;
+}
+QPushButton:hover{
+	border: none;
+	color: #4A4A4A;
+}</string>
+            </property>
+            <property name="text">
+             <string>Уже есть аккаунт</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
        </layout>
       </item>
-      <item row="4" column="1">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>70</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="12" column="1">
+      <item row="14" column="1">
        <spacer name="verticalSpacer_3">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -321,7 +370,7 @@ QPushButton:hover{
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>70</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>
@@ -331,6 +380,8 @@ QPushButton:hover{
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="back.qrc"/>
+ </resources>
  <connections/>
 </ui>
