@@ -1,13 +1,18 @@
 import psycopg2
 
-"""select chat_id where (user_id_1 = user || user_id_2 = user) && (user_id_1 = other_user || user_id_2 = other_user)
-select chat_id where user_id_1 = other_user && user_id_2 = user
-get_user_chat(user_id_1, user_id_2)
-get_user_chat(user_id_2, user_id_1)
-"""
+
+class MetaSingleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(MetaSingleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
 
-class UsersDB:
+class UsersDB(metaclass=MetaSingleton):
+    __conn = None
+
     def __init__(self):
         self.__connection()
         # self.__drop_table()
@@ -23,7 +28,7 @@ class UsersDB:
         self._cur = self._conn.cursor()
 
     def disconnect(self):
-        self.__con
+        self._cur.close()
 
     # Drop table if exists
     def __drop_table(self):

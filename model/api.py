@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from main_model import UserVerification, Data, DB, MessageLoader
+from main_model import UserVerification, Data, MessageLoader
 
 app = FastAPI()
-db = DB()
-verification = UserVerification(db=db)
+
+verification = UserVerification()
 
 
 @app.post("/sign")
@@ -26,5 +26,6 @@ def get_remember_me(data: dict):
 
 @app.get("/loading_messages")
 def get_messages(data: dict):
-    a = MessageLoader(db=db).main_method(data['username'], data['password'])
-    return a
+    loader = MessageLoader()
+    response = loader.main_method(data['username'], data['password'])
+    return response

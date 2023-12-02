@@ -16,18 +16,11 @@ class Data:
     telephone_number: str = None
 
 
-class DB:
+class MessageLoader:
     db: UsersDB
 
     def __init__(self):
         self.db = UsersDB()
-
-
-class MessageLoader:
-    db: UsersDB
-
-    def __init__(self, db: DB):
-        self.db = db.db
 
     def main_method(self, username: str, password: str) -> dict:
         response = {}
@@ -40,6 +33,7 @@ class MessageLoader:
                 response[chat_id[0]] = chat_messages
             return response
         return {"Ты дебил": "куда лезешь"}
+
     def get_user_id(self, username: str, password: str) -> tuple:
         return self.db.get_user_id(username, password)
 
@@ -56,8 +50,8 @@ class MessageLoader:
 class UserVerification:
     db: UsersDB
 
-    def __init__(self, db: DB):
-        self.db = db.db
+    def __init__(self):
+        self.db = UsersDB()
 
     def verification(self, data: Data):
         response = {'username': self.set_username(data)}
