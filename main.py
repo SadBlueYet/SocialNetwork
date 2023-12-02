@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 
 from gui.login import Ui_MainWindow
 
-from controller.verification import UserVerification, check_remember
+from controller.verification_controller import UserVerification, check_remember
 
 from gui.styles import styles
 

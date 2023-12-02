@@ -1,5 +1,11 @@
 import psycopg2
 
+"""select chat_id where (user_id_1 = user || user_id_2 = user) && (user_id_1 = other_user || user_id_2 = other_user)
+select chat_id where user_id_1 = other_user && user_id_2 = user
+get_user_chat(user_id_1, user_id_2)
+get_user_chat(user_id_2, user_id_1)
+"""
+
 
 class UsersDB:
     def __init__(self):
@@ -15,6 +21,9 @@ class UsersDB:
                                       port="5432",
                                       database="users")
         self._cur = self._conn.cursor()
+
+    def disconnect(self):
+        self.__con
 
     # Drop table if exists
     def __drop_table(self):
@@ -79,3 +88,26 @@ class UsersDB:
     def update_remember_me(self, remember_me: bool, uuid: str) -> None:
         query = "UPDATE users SET remember_me = %s WHERE uuid = %s"
         self._execute_query(query, (remember_me, uuid))
+
+    def get_users_chat(self, user_id_1: str, user_id_2: str):
+        query = "SELECT id FROM user_chats WHERE user_id_1 = %s AND user_id_2 = %s OR user_id_1 = %s AND user_id_2 = %s"
+        params = (user_id_1, user_id_2, user_id_2, user_id_1)
+        chat_id = self._execute_query(query, params)
+        return chat_id.fetchone()
+
+    def get_all_messages(self, user_chat_id: int):
+        query = """SELECT body, sender, getter, id FROM user_messages WHERE user_chat_id = %s"""
+        response = self._execute_query(query, (user_chat_id,))
+        return response.fetchall()
+
+    def get_user_interlocutors(self, user_id: str) -> list:
+        query = "SELECT user_id_1, user_id_2 FROM user_chats WHERE user_id_1 = %s OR user_id_2 = %s"
+        params = (user_id, user_id)
+        interlocutors = self._execute_query(query, params)
+        data = interlocutors.fetchall()
+        return [other_user_id for pair in data for other_user_id in pair if other_user_id != user_id]
+
+    def get_user_id(self, username: str, password: str) -> tuple:
+        query = "SELECT id FROM users WHERE username = %s AND password = %s"
+        user_id = self._execute_query(query, (username, password))
+        return user_id.fetchone()
