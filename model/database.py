@@ -15,7 +15,6 @@ class UsersDB(metaclass=MetaSingleton):
 
     def __init__(self):
         self.__connection()
-        # self.__drop_table()
         self.__create_table()
 
     # Connection with database
@@ -30,27 +29,27 @@ class UsersDB(metaclass=MetaSingleton):
     def disconnect(self):
         self._cur.close()
 
-    # Drop table if exists
-    def __drop_table(self):
-        self._cur.execute("DROP TABLE IF EXISTS users")
-        self._conn.commit()
-
     def __create_table(self):
         self._cur.execute("""CREATE TABLE IF NOT EXISTS users (
                           id SERIAL PRIMARY KEY,                                     
-                          username TEXT, password TEXT, 
-                          telephone_number TEXT,
+                          username VARCHAR(255) NOT NULL,
+                          password TEXT NOT NULL,
+                          telephone_number VARCHAR(20),
                           remember_me BOOLEAN,
-                          uuid TEXT);
+                          uuid TEXT,
+                          UNIQUE(username),
+                          UNIQUE(telephone_number));
                           CREATE TABLE IF NOT EXISTS user_chats(
                           id SERIAL PRIMARY KEY,
-                          user_id_1 INTEGER,
-                          user_id_2 INTEGER);
+                          user_id_1 INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                          user_id_2 INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                          UNIQUE(user_id_1, user_id_2));
                           CREATE TABLE IF NOT EXISTS user_messages(
                           id SERIAL PRIMARY KEY,
-                          user_chat_id INTEGER,
-                          text TEXT,
-                          sender INTEGER);""")
+                          chat_id INTEGER REFERENCES user_chats(id) ON DELETE CASCADE,
+                          body TEXT,
+                          sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                          getter_id INTEGER REFERENCES users(id) ON DELETE CASCADE);""")
         self._conn.commit()
 
     def _execute_query(self, query, params=None):
@@ -72,47 +71,59 @@ class UsersDB(metaclass=MetaSingleton):
 
     def find_username(self, username: str) -> tuple:
         query = "SELECT username FROM users WHERE username = %s"
-        db_username = self._execute_query(query, (username,))
-        return db_username
+        return self._execute_query(query, (username,)).fetchone()
 
-    def find_telephone_number(self, telephone_number: str) -> tuple:
+    def get_telephone_number(self, telephone_number: str) -> tuple:
         query = "SELECT telephone_number FROM users WHERE telephone_number = %s"
-        db_telephone_number = self._execute_query(query, (telephone_number,))
-        return db_telephone_number
+        return self._execute_query(query, (telephone_number,)).fetchone()
 
-    def find_password(self, username: str) -> tuple:
+    def get_password(self, username: str) -> tuple:
         query = "SELECT password FROM users WHERE username = %s"
-        db_password = self._execute_query(query, (username,))
-        return db_password.fetchone()
+        return self._execute_query(query, (username,)).fetchone()
+
+    def get_username(self, user_id: int) -> tuple:
+        query = "SELECT username FROM users WHERE id = %s"
+        return self._execute_query(query, (user_id,)).fetchone()
 
     def get_remember_me(self, uuid: str) -> tuple:
         query = "SELECT remember_me FROM users WHERE uuid = %s"
-        db_remember_me = self._execute_query(query, (uuid,))
-        return db_remember_me.fetchone()
+        return self._execute_query(query, (uuid,)).fetchone()
 
     def update_remember_me(self, remember_me: bool, uuid: str) -> None:
         query = "UPDATE users SET remember_me = %s WHERE uuid = %s"
         self._execute_query(query, (remember_me, uuid))
 
-    def get_users_chat(self, user_id_1: str, user_id_2: str):
+    def get_users_chat(self, user_id_1: int, user_id_2: int):
         query = "SELECT id FROM user_chats WHERE user_id_1 = %s AND user_id_2 = %s OR user_id_1 = %s AND user_id_2 = %s"
         params = (user_id_1, user_id_2, user_id_2, user_id_1)
-        chat_id = self._execute_query(query, params)
-        return chat_id.fetchone()
+        return self._execute_query(query, params).fetchone()
 
     def get_all_messages(self, user_chat_id: int):
-        query = """SELECT body, sender, getter, id FROM user_messages WHERE user_chat_id = %s"""
-        response = self._execute_query(query, (user_chat_id,))
-        return response.fetchall()
+        query = """SELECT body, sender_id, getter_id, id FROM user_messages WHERE chat_id = %s"""
+        return self._execute_query(query, (user_chat_id,)).fetchall()
 
-    def get_user_interlocutors(self, user_id: str) -> list:
+    def get_user_interlocutors(self, user_id: int) -> list:
         query = "SELECT user_id_1, user_id_2 FROM user_chats WHERE user_id_1 = %s OR user_id_2 = %s"
         params = (user_id, user_id)
         interlocutors = self._execute_query(query, params)
         data = interlocutors.fetchall()
         return [other_user_id for pair in data for other_user_id in pair if other_user_id != user_id]
 
-    def get_user_id(self, username: str, password: str) -> tuple:
-        query = "SELECT id FROM users WHERE username = %s AND password = %s"
-        user_id = self._execute_query(query, (username, password))
-        return user_id.fetchone()
+    def get_user_id(self, username: str) -> tuple:
+        query = "SELECT id FROM users WHERE username = %s"
+        return self._execute_query(query, (username,)).fetchone()
+
+    def set_chat(self, user_id_1: int, user_id_2: int) -> None:
+        query = """INSERT INTO user_chats (user_id_1, user_id_2)  
+                   SELECT %s, %s 
+                   WHERE NOT EXISTS (
+                        SELECT 1 
+                        FROM user_chats 
+                        WHERE (user_id_1 = %s AND user_id_2 = %s) 
+                           OR (user_id_1 = %s AND user_id_2 = %s));"""
+        params = (user_id_1, user_id_2, user_id_1, user_id_2, user_id_2, user_id_1)
+        self._execute_query(query, params)
+
+    def set_message(self, chat_id: int, text: str, sender_id: int, getter_id: int) -> None:
+        query = "INSERT INTO user_messages (chat_id, body, sender_id, getter_id) VALUES (%s, %s, %s, %s)"
+        self._execute_query(query, (chat_id, text, sender_id, getter_id))

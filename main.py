@@ -51,7 +51,7 @@ class LoginForm(QMainWindow):
     def get_user_data(self):
         """
 
-        Метод котрый получает данные пользователя с лэйблов и отправляети их на проверку
+        Метод котрый получает данные пользователя с лэйблов и отправляет их на проверку
 
         """
         remember_me = self.ui.checkBox.isChecked()

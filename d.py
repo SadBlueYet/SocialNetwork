@@ -1,7 +1,18 @@
 import requests
+import httpx
 from pprint import pprint
 
-a = requests.get("http://127.0.0.1:8000/loading_messages",
-                 json={"username": "aedfw3w3f",
-                       "password": "47d749de595e4fb2dc9ddc098d2b1ce740eecbdfb68809d3e846ef161d894895"}).json()
+"""a = requests.post("http://127.0.0.1:8000/set_message", json={"text": "еблан", "getter_id": 3, "sender_id": 2}).json()
+pprint(a)
+# ["текст", sender_id, getter_id]
+for i in range(10):
+    if i % 2:
+        a = requests.post("http://127.0.0.1:8000/set_message",
+                          json={"text": f"{i}", "getter_id": 3, "sender_id": 2}).json()
+    else:
+        a = requests.post("http://127.0.0.1:8000/set_message",
+                          json={"text": f"{i}", "getter_id": 2, "sender_id": 3}).json()
+    pprint(a)"""
+
+a = requests.get("http://127.0.0.1:8000/get_id_by_username", json={"username": "SadBlue"}).json()
 pprint(a)
